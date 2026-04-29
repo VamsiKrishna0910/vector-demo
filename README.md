@@ -468,7 +468,62 @@ The ingestion process:
 
 ---
 
-## 🆘 Troubleshooting
+## � Organization-Wide Deployment
+
+For persistent, shared infrastructure across teams (survives individual user departures):
+
+### Setup at `/opt/milvus-stack/`
+
+```bash
+# Location: /opt/milvus-stack/
+# Ownership: root:docker (for admin-controlled persistence)
+# Access: Any user in docker group
+
+cd /opt/milvus-stack
+docker compose up -d
+docker compose ps
+```
+
+### Key Documentation
+
+| Document | Purpose |
+|----------|---------|
+| **[DEPLOYMENT.md](DEPLOYMENT.md)** | Full deployment guide with quick start, troubleshooting, and integration examples |
+| **[ADMIN_GUIDE.md](ADMIN_GUIDE.md)** | Administrator procedures: backups, monitoring, handover, emergency recovery |
+| **[NETWORK_SETUP.md](NETWORK_SETUP.md)** | Multi-user networking and firewall configuration |
+
+### Quick Reference
+
+| Task | Command |
+|------|---------|
+| Start services | `cd /opt/milvus-stack && docker compose up -d` |
+| View status | `cd /opt/milvus-stack && docker compose ps` |
+| View logs | `cd /opt/milvus-stack && docker compose logs milvus` |
+| Access Attu UI | `http://<server-ip>:8080` |
+| Milvus gRPC | `<server-ip>:19530` |
+
+### Adding Users to Docker Group
+
+```bash
+# Admin runs this to grant access
+sudo usermod -aG docker <username>
+```
+
+### Python Client Connection
+
+```python
+from pymilvus import Collection, connections
+
+connections.connect(
+    alias="default",
+    host="<server-ip>",    # e.g., 89.167.64.207
+    port=19530
+)
+```
+
+---
+
+## �🆘 Troubleshooting
 
 ### FAQ
 
